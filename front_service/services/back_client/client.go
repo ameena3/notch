@@ -29,7 +29,7 @@ var _ Client = (*client)(nil)
 
 func NewClient() *client {
 	// Set up a connection to the server.
-	conn, err := grpc.Dial("localhost:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("backservice:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -62,7 +62,7 @@ func (c *client) CreateCart(ctx context.Context, name string) (*pb.Cart, error) 
 func (c *client) AddProductToCart(ctx context.Context, cartID int64, productID int64) (*pb.Cart, error) {
 	// Contact the server and print out its response.
 	r, err := c.client.AddProductToCart(ctx, &pb.AddProductToCartRequest{
-		CartId:    cartID,
+		CartId:     cartID,
 		ProductSku: productID,
 	})
 	if err != nil {
@@ -82,7 +82,7 @@ func (c *client) GetCartProducts(ctx context.Context, cartID int64) (*pb.CartPro
 	return r, nil
 }
 
-func( c *client) RemoveProductFromCart(ctx context.Context, cartID int64, productID int64) (*pb.Cart, error) {
+func (c *client) RemoveProductFromCart(ctx context.Context, cartID int64, productID int64) (*pb.Cart, error) {
 	// Contact the server and print out its response.
 	r, err := c.client.RemoveProductFromCart(ctx, &pb.RemoveProductFromCartRequest{
 		CartId:    cartID,
@@ -94,7 +94,7 @@ func( c *client) RemoveProductFromCart(ctx context.Context, cartID int64, produc
 	return r, nil
 }
 
-func (c *client) GetCart (ctx context.Context, cartID int64) (*pb.Cart, error) {
+func (c *client) GetCart(ctx context.Context, cartID int64) (*pb.Cart, error) {
 	// Contact the server and print out its response.
 	r, err := c.client.GetCart(ctx, &pb.GetCartRequest{
 		Id: cartID,

@@ -60,7 +60,7 @@ func (fs *FrontService) CheckoutHandler(w http.ResponseWriter, r *http.Request) 
 		}
 		data := checkoutPage{
 			Title:      "Checkout Page",
-			Price:     dataG.TotalPrice,
+			Price:      dataG.TotalPrice,
 			Tax:        dataG.TotalPrice * .10,
 			TotalPrice: dataG.TotalPrice + (dataG.TotalPrice * .10),
 		}

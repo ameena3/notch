@@ -23,8 +23,8 @@ type (
 		GetCart(ctx context.Context, id int64) (*pb.Cart, error)
 		GetCartProducts(ctx context.Context, id int64) (*pb.CartProducts, error)
 		UpdateCart(ctx context.Context, cart *pb.Cart) (*pb.Cart, error)
-		AddProductToCart(ctx context.Context, product *pb.Product, cart *pb.Cart) (*pb.Cart, error)
-		RemoveProductFromCart(ctx context.Context, product *pb.Product, cart *pb.Cart) (*pb.Cart, error)
+		AddProductToCart(ctx context.Context, p *pb.Product, cart *pb.Cart) (*pb.Cart, error)
+		RemoveProductFromCart(ctx context.Context, p *pb.Product, cart *pb.Cart) (*pb.Cart, error)
 	}
 
 	client struct {
@@ -39,7 +39,7 @@ var (
 )
 
 func NewClient() *client {
-	dsn := "server=" + "127.0.0.1" + ";user id=" + "sa" + ";password=" + "notch@12345" + ";database=" + "notch"
+	dsn := "server=" + "sql" + ";user id=" + "sa" + ";password=" + "notch@12345" + ";database=" + "notch"
 	db, err := sql.Open("mssql", dsn)
 	if err != nil {
 		panic(err)
