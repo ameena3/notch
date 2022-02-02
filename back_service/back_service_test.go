@@ -113,6 +113,56 @@ func Test_add_product_to_cart(t *testing.T) {
 	}
 }
 
+func Test_remove_product_from_cart(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock_db_client := mock_client.NewMockClient(ctrl)
+	ctx := context.TODO()
+	name := "testname"
+	sku := int64(10.0)
+	cartID := int64(1)
+	mock_db_client.EXPECT().GetProductBySKU(ctx, sku).Return(&product.Product{
+		SKU:         sku,
+		Name:        name,
+		Description: "testdescription",
+		Price:       10,
+	}, nil)
+	mock_db_client.EXPECT().GetCart(ctx, cartID).Return(&product.Cart{
+		CartId:     cartID,
+		TotalPrice: 10,
+		Name:       name,
+	}, nil)
+	mock_db_client.EXPECT().UpdateCart(ctx, &product.Cart{
+		CartId:     cartID,
+		TotalPrice: 0,
+		Name:       name,
+	}).Return(&product.Cart{
+		CartId:     cartID,
+		TotalPrice: 0,
+		Name:       name,
+	}, nil)
+	mock_db_client.EXPECT().RemoveProductFromCart(ctx, &product.Product{
+		SKU:         sku,
+		Name:        name,
+		Description: "testdescription",
+		Price:       10,
+	}, &product.Cart{
+		CartId:     cartID,
+		TotalPrice: 0,
+		Name:       name,
+	})
+	ser := &server{
+		dbClient: mock_db_client,
+	}
+	res, err := ser.RemoveProductFromCart(ctx, &product.RemoveProductFromCartRequest{
+		CartId:    cartID,
+		ProductId: sku,
+	})
+	if err != nil || res != nil {
+		t.Errorf("Expected nil, nil, but got %v, %v", res, err)
+	}
+}
+
 func Test_get_cart(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
